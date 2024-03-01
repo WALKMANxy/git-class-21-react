@@ -2,9 +2,17 @@
 
 # dependencies
 /node_modules
+<<<<<<< HEAD
 /day1/project1/node_modules
 /.pnp
 .pnp.js
+=======
+/.pnp
+.pnp.js
+/project1/node_modules
+/day1/project1/node_modules
+/day2/project1/node_modules
+>>>>>>> 3c937ab (Added Day2, learning hooks)
 
 # testing
 /coverage
