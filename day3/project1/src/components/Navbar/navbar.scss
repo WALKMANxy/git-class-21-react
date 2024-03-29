@@ -1,0 +1,26 @@
+/* Navbar.scss */
+
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 20px;
+  background-color: #333;
+  color: #fff;
+}
+
+.navbar-title {
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.navbar-action, .home-link {
+  cursor: pointer;
+  font-size: 20px;
+  text-decoration: none; /* Remove underline from links */
+  color: #fff; /* Match the navbar text color */
+}
+
+.navbar-action:hover, .home-link:hover {
+  color: #ffd700; /* Change color on hover */
+}
