@@ -1,12 +1,19 @@
 import React, { useEffect, useState } from "react";
-import { useCharacters } from '../../hooks/useGenericRMA'; // Adjust the path as necessary
-import PaginationControls from '../PaginationControls/PaginationControls';
-import './Characters.scss';
-import Axios from 'axios';
+import { useCharacters } from "../../hooks/useGenericRMA"; // Adjust the path as necessary
+import { useSearch } from "../../contexts/SearchContext";
+import { useSearchParams } from "react-router-dom";
+import PaginationControls from "../PaginationControls/PaginationControls";
+import "./Characters.scss";
+import Axios from "axios";
 
 export const Characters = () => {
   const [currentPage, setCurrentPage] = useState<number>(1);
-  const [characters, loading, totalPages] = useCharacters(currentPage);
+  const [searchParams] = useSearchParams();
+  const searchQuery = searchParams.get("search") || "";
+  const [characters, loading, totalPages] = useCharacters(
+    currentPage,
+    searchQuery
+  );
   const [firstEpisodes, setFirstEpisodes] = useState<string[]>([]);
 
   useEffect(() => {
@@ -30,17 +37,13 @@ export const Characters = () => {
     }
   }, [characters]);
 
-  if (loading) {
-    return <div>Loading characters...</div>;
-  }
-
   return (
     <div>
-      <PaginationControls 
-          currentPage={currentPage} 
-          totalPages={totalPages} 
-          setCurrentPage={setCurrentPage}
-        />
+      <PaginationControls
+        currentPage={currentPage}
+        totalPages={totalPages}
+        setCurrentPage={setCurrentPage}
+      />
       <div className="characters-container">
         {characters.map((char, index) => (
           <div key={char.id} className="character-item">
@@ -50,10 +53,20 @@ export const Characters = () => {
             <div className="character-info">
               <p className="character-name">{char.name}</p>
               <div className="character-details">
-                <p><span className="label">Gender:</span> {char.gender}</p>
-                <p><span className="label">Status:</span> {char.status}</p>
-                <p><span className="label">Last known location:</span> {char.location.name}</p>
-                <p><span className="label">First seen in:</span> {firstEpisodes[index] || "Unknown"}</p>
+                <p>
+                  <span className="label">Gender:</span> {char.gender}
+                </p>
+                <p>
+                  <span className="label">Status:</span> {char.status}
+                </p>
+                <p>
+                  <span className="label">Last known location:</span>{" "}
+                  {char.location.name}
+                </p>
+                <p>
+                  <span className="label">First seen in:</span>{" "}
+                  {firstEpisodes[index] || "Unknown"}
+                </p>
               </div>
             </div>
           </div>

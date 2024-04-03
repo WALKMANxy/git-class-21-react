@@ -1,8 +1,8 @@
 // At the top of your HomePage.tsx file
-import React from 'react';
-import { Link } from 'react-router-dom';
-import logo from '../../public/logo.png'; // Adjust the path as necessary
-import './HomePage.scss';
+import React from "react";
+import { Link } from "react-router-dom";
+import logo from "../../public/logo.png"; // Adjust the path as necessary
+import "./HomePage.scss";
 
 const HomePage = () => {
   return (
@@ -11,9 +11,15 @@ const HomePage = () => {
       <h2 className="subtitle">Rick and Morty API _ TESTAPP</h2>
       <nav>
         <ul>
-          <li><Link to="/characters">Characters</Link></li>
-          <li><Link to="/locations">Locations</Link></li>
-          <li><Link to="/episodes">Episodes</Link></li>
+          <li>
+            <Link to="/characters">Characters</Link>
+          </li>
+          <li>
+            <Link to="/locations">Locations</Link>
+          </li>
+          <li>
+            <Link to="/episodes">Episodes</Link>
+          </li>
         </ul>
       </nav>
     </div>
