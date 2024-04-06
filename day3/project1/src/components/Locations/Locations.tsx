@@ -1,20 +1,38 @@
 // imports
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useLocation } from "../../hooks/useGenericRMA"; // Adjust the path as necessary
-import { useSearch } from "../../contexts/SearchContext";
 import PaginationControls from "../PaginationControls/PaginationControls";
 import "./Locations.scss"; // Ensure you have a CSS/SCSS file for Locations
+import { useDispatch, useSelector } from "react-redux";
+import { setSearchQuery } from "../../redux/searchSlice";
+import LoadingIndicator from "../LoadingIndicator/LoadingIndicator";
 
 export const Locations = () => {
   const [currentPage, setCurrentPage] = useState<number>(1);
-  const { searchQuery } = useSearch();
-  const [locations, loading, totalPages] = useLocation(
+  const dispatch = useDispatch();
+  const searchQuery = useSelector((state: any) => state.search.searchQuery);
+  const [locations, loading, totalPages, error] = useLocation(
     currentPage,
     searchQuery
   );
 
   // Since we don't have to fetch additional details like the first episode for locations,
   // we can directly render the locations data without an additional useEffect.
+
+  useEffect(() => {
+    // Update the search query based on URL search params if needed
+    const queryParams = new URLSearchParams(window.location.search);
+    const query = queryParams.get("search");
+    if (query) dispatch(setSearchQuery(query));
+  }, [dispatch]);
+
+  if (loading) {
+    return <LoadingIndicator />;
+  }
+
+  if (error) {
+    return <div className="error-message">{error}</div>;
+  }
 
   return (
     <div>

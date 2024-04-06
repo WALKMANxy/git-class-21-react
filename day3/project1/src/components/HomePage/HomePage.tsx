@@ -20,6 +20,9 @@ const HomePage = () => {
           <li>
             <Link to="/episodes">Episodes</Link>
           </li>
+          <li>
+            <Link to="/extra-memory">Memory Game</Link>
+            </li>
         </ul>
       </nav>
     </div>

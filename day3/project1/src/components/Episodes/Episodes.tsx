@@ -1,14 +1,35 @@
 // Imports
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useEpisodes } from "../../hooks/useGenericRMA"; // Ensure this is correctly imported
-import { useSearch } from "../../contexts/SearchContext";
 import PaginationControls from "../PaginationControls/PaginationControls";
 import "./Episodes.scss"; // Make sure you have an SCSS file for Episodes
+import { useDispatch, useSelector } from "react-redux";
+import { setSearchQuery } from "../../redux/searchSlice";
+import LoadingIndicator from "../LoadingIndicator/LoadingIndicator";
 
 export const Episodes = () => {
   const [currentPage, setCurrentPage] = useState<number>(1);
-  const { searchQuery } = useSearch();
-  const [episodes, loading, totalPages] = useEpisodes(currentPage, searchQuery);
+  const dispatch = useDispatch();
+  const searchQuery = useSelector((state: any) => state.search.searchQuery);
+  const [episodes, loading, totalPages, error] = useEpisodes(
+    currentPage,
+    searchQuery
+  );
+
+  useEffect(() => {
+    // Update the search query based on URL search params if needed
+    const queryParams = new URLSearchParams(window.location.search);
+    const query = queryParams.get("search");
+    if (query) dispatch(setSearchQuery(query));
+  }, [dispatch]);
+
+  if (loading) {
+    return <LoadingIndicator />;
+  }
+
+  if (error) {
+    return <div className="error-message">{error}</div>;
+  }
 
   return (
     <div>

@@ -1,20 +1,30 @@
 import React, { useEffect, useState } from "react";
 import { useCharacters } from "../../hooks/useGenericRMA"; // Adjust the path as necessary
-import { useSearch } from "../../contexts/SearchContext";
-import { useSearchParams } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 import PaginationControls from "../PaginationControls/PaginationControls";
 import "./Characters.scss";
-import Axios from "axios";
+import { useFirstEpisodes } from "../../hooks/useFirstEpisodes";
+import { setSearchQuery } from "../../redux/searchSlice";
+import LoadingIndicator from "../LoadingIndicator/LoadingIndicator";
 
 export const Characters = () => {
   const [currentPage, setCurrentPage] = useState<number>(1);
-  const [searchParams] = useSearchParams();
-  const searchQuery = searchParams.get("search") || "";
-  const [characters, loading, totalPages] = useCharacters(
+  const dispatch = useDispatch();
+  const searchQuery = useSelector((state: any) => state.search.searchQuery);
+  const [characters, loading, totalPages, error] = useCharacters(
     currentPage,
     searchQuery
   );
-  const [firstEpisodes, setFirstEpisodes] = useState<string[]>([]);
+  const firstEpisodes = useFirstEpisodes(characters);
+
+  useEffect(() => {
+    // Update the search query based on URL search params if needed
+    const queryParams = new URLSearchParams(window.location.search);
+    const query = queryParams.get("search");
+    if (query) dispatch(setSearchQuery(query));
+  }, [dispatch]);
+
+  /* const [firstEpisodes, setFirstEpisodes] = useState<string[]>([]);
 
   useEffect(() => {
     const fetchFirstEpisodes = async () => {
@@ -36,6 +46,15 @@ export const Characters = () => {
       fetchFirstEpisodes();
     }
   }, [characters]);
+ */
+
+  if (loading) {
+    return <LoadingIndicator />;
+  }
+
+  if (error) {
+    return <div className="error-message">{error}</div>;
+  }
 
   return (
     <div>

@@ -1,20 +1,28 @@
 import React, { useState, useEffect, memo } from "react";
-import { Link, useLocation, useNavigate } from "react-router-dom"; // Import Link
-import "./navbar.scss"; // Import your CSS file for styling
-import { useSearch } from "../../contexts/SearchContext";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import "./navbar.scss";
+//import { useSearch } from "../../contexts/SearchContext";
+import { useDispatch } from "react-redux";
+import { setSearchQuery } from "../../redux/searchSlice";
 
 const Navbar = memo(() => {
   console.log("Navbar rendered");
 
-  const [inputValue, setInputValue] = useState(""); // Local state to handle input value
+  /*  const [inputValue, setInputValue] = useState(""); // Local state to handle input value
   const { setSearchQuery } = useSearch();
+  const routeLocation = useLocation();
+  const navigate = useNavigate();
+ */
+
+  const [inputValue, setInputValue] = useState("");
+  const dispatch = useDispatch();
   const routeLocation = useLocation();
   const navigate = useNavigate();
 
   // Debounce search query update
   useEffect(() => {
     const handler = setTimeout(() => {
-      setSearchQuery(inputValue);
+      dispatch(setSearchQuery(inputValue));
       if (inputValue.trim()) {
         // Update the URL without navigating away
         navigate(
@@ -28,7 +36,7 @@ const Navbar = memo(() => {
     }, 500);
 
     return () => clearTimeout(handler);
-  }, [inputValue, setSearchQuery, navigate, routeLocation.pathname]);
+  }, [inputValue, dispatch, navigate, routeLocation.pathname]);
 
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setInputValue(event.target.value); // Update local state immediately
@@ -37,16 +45,17 @@ const Navbar = memo(() => {
   return (
     <div className="navbar">
       <div className="navbar-title">RICK AND MORTY API _ test</div>
-      {routeLocation.pathname !== "/" && ( // Conditionally render the search bar if not on the homepage
-        <div className="navbar-search">
-          <input
-            type="text"
-            placeholder="Type here to search..."
-            value={inputValue}
-            onChange={handleSearchChange}
-          />
-        </div>
-      )}
+      {routeLocation.pathname !== "/" &&
+        routeLocation.pathname !== "/extra-memory" && ( // Conditionally render the search bar if not on the homepage
+          <div className="navbar-search">
+            <input
+              type="text"
+              placeholder="Type here to search..."
+              value={inputValue}
+              onChange={handleSearchChange}
+            />
+          </div>
+        )}
       {routeLocation.pathname !== "/" && ( // Conditionally render the home button if not on the homepage
         <div className="navbar-action">
           <Link to="/" className="home-link">
