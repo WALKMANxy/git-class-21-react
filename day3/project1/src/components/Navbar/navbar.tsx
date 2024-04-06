@@ -6,7 +6,7 @@ import { useDispatch } from "react-redux";
 import { setSearchQuery } from "../../redux/searchSlice";
 
 const Navbar = memo(() => {
-  console.log("Navbar rendered");
+  //console.log("Navbar rendered");
 
   /*  const [inputValue, setInputValue] = useState(""); // Local state to handle input value
   const { setSearchQuery } = useSearch();
@@ -18,6 +18,23 @@ const Navbar = memo(() => {
   const dispatch = useDispatch();
   const routeLocation = useLocation();
   const navigate = useNavigate();
+  
+  useEffect(() => {
+    // Clear search query and input value when entering specific locations
+    const clearSearch = () => {
+      if (
+        routeLocation.pathname === "/episodes" ||
+        routeLocation.pathname === "/locations" ||
+        routeLocation.pathname === "/extra-memory"
+      ) {
+        dispatch(setSearchQuery(''));
+        setInputValue('');
+      }
+    };
+
+    clearSearch();
+  }, [routeLocation.pathname, dispatch]);
+
 
   // Debounce search query update
   useEffect(() => {
@@ -44,7 +61,7 @@ const Navbar = memo(() => {
 
   return (
     <div className="navbar">
-      <div className="navbar-title">RICK AND MORTY API _ test</div>
+      <div className="navbar-title">RICK AND MORTY API</div>
       {routeLocation.pathname !== "/" &&
         routeLocation.pathname !== "/extra-memory" && ( // Conditionally render the search bar if not on the homepage
           <div className="navbar-search">

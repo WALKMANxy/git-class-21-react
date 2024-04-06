@@ -54,3 +54,18 @@ export type Location = {
   url: string;
   created: string;
 };
+
+export type GameCard = {
+  id: string;
+  name: string;
+  image: string;
+  flipped: boolean;
+  matched: boolean;
+};
+
+
+export type GameState = {
+  cards: GameCard[];
+  status: 'idle' | 'loading' | 'succeeded' | 'failed';
+  error: string | null;
+}

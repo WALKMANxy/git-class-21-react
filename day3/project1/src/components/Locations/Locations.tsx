@@ -16,6 +16,11 @@ export const Locations = () => {
     searchQuery
   );
 
+  // Listen for changes in searchQuery and reset currentPage to 1
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchQuery]);
+
   // Since we don't have to fetch additional details like the first episode for locations,
   // we can directly render the locations data without an additional useEffect.
 

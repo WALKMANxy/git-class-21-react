@@ -17,6 +17,11 @@ export const Characters = () => {
   );
   const firstEpisodes = useFirstEpisodes(characters);
 
+  // Listen for changes in searchQuery and reset currentPage to 1
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchQuery]);
+
   useEffect(() => {
     // Update the search query based on URL search params if needed
     const queryParams = new URLSearchParams(window.location.search);
